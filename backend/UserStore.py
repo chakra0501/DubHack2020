@@ -6,7 +6,9 @@ class User:
                     workout_type : str, 
                     age : int,
                     about : str,
-                    email : str):
+                    email : str,
+                    first : str,
+                    last : str):
         self.gender = gender 
         self.location = loc #City
         self.workout_type = workout_type
@@ -14,6 +16,8 @@ class User:
         self.username = username 
         self.about = about 
         self.email = email
+        self.first = first
+        self.last = last
         
         #Likes
         self.likes = set()
@@ -30,12 +34,15 @@ class User:
             'workout' : self.workout_type,
             'about' : self.about,
             'email' : self.email,
-            'age' : self.age 
+            'age' : self.age,
+            'first': self.first,
+            'last': self.last 
         }
         return out
     
     #Changing Likes
     def addLike(self, username):
+        print(username)
         self.likes.add(username)
 
     def getLikes(self):
