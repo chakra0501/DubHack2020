@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 from flask import Flask, url_for, send_file, make_response, request, jsonify
-from UserStore import UserStore
+from flask_cors import CORS
+import UserStore
 
-"""Test Addition to the Dictionary
+#Test Addition to the Dictionary
 bob = UserStore.User("bob","male","Seattle","Abs",23,"I'm buff","bob101@gmail.com", 'Bob', 'Marley')
 joy = UserStore.User("joy", "female", "Chicago", "butt", 23, "Poojan GF", "poojanGF@poojangf.com", 'Joy', 'Mun')
 julio = UserStore.User("julio","female", "Los Angeles", "chest", 40, "hello world", "hi@email", "Julio", "Jones")
 julio.addLike('bob')
 julio.addLike('joy')
-julio.addMatch('bob')"""
+julio.addMatch('bob')
 
 
 #The Two Main Dictionaries to be Used
-#usernameDict = {'bobby' : bob, 'joy' : joy, 'julio' : julio}
-usernameDict = {}
+usernameDict = {'bobby' : bob, 'joy' : joy, 'julio' : julio}
+#usernameDict = {}
 workoutDict = {}
 
 #Main Flask name
 app = Flask(__name__)
+CORS(app)
 
 #Calling and Generating a New User
 @app.route('/newUser') 
@@ -71,6 +73,7 @@ def newDislike():
 @app.route('/newLike')
 def newLike():
     oldUser, newLike = request.args.get('user'), request.args.get('like')
+    print(newLike)
     if newLike in usernameDict:
         #Removes from the Potential matches to Likes
         usernameDict[oldUser].removePotential(newLike)
@@ -92,20 +95,25 @@ def newLike():
 @app.route('/getLike')
 def getLike():
     oldUser = request.args.get('user')
-    #print(usernameDict)
-    #print(oldUser)
+    print(usernameDict)
+    print(oldUser)
     if oldUser in usernameDict:
         return jsonify(results=list(usernameDict[oldUser].getLikes()))
     return "N/A"
 
 #Getting Info On The User
-@app.route('/infoUser')
+@app.route('/infoUser', methods=['POST'])
 def infoUser():
+    if request.json:
+        print('Got JSON!')
     infoUser = request.args.get('user')
-    #print(usernameDict)
-    #print(infoUser)
+    print(usernameDict)
+    print(infoUser)
     if infoUser in usernameDict:
+        print("Successful!")
+        print(usernameDict[infoUser].getInfo())
         return jsonify(usernameDict[infoUser].getInfo())
+    print("Data not available...")
     return "N/A"
 
 #User can remove a particular like    
@@ -124,7 +132,7 @@ def getMatches():
     return "N/A"
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port = 8080, debug = True)
+    app.run(host='0.0.0.0', port = 3000, debug = True)
     
 #Sample Urls
 #127.0.0.1/8080/matches?username=bob

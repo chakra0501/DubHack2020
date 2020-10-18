@@ -63,7 +63,7 @@ class User:
     
     #Changing Matches
     def addMatch(self, username):
-        self.like.remove(username)
+        self.likes.remove(username)
         self.match.add(username)
         
     def getMatches(self):
