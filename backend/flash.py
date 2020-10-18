@@ -71,7 +71,6 @@ def newDislike():
 @app.route('/newLike')
 def newLike():
     oldUser, newLike = request.args.get('user'), request.args.get('like')
-    print(newLike)
     if newLike in usernameDict:
         #Removes from the Potential matches to Likes
         usernameDict[oldUser].removePotential(newLike)
@@ -93,8 +92,8 @@ def newLike():
 @app.route('/getLike')
 def getLike():
     oldUser = request.args.get('user')
-    print(usernameDict)
-    print(oldUser)
+    #print(usernameDict)
+    #print(oldUser)
     if oldUser in usernameDict:
         return jsonify(results=list(usernameDict[oldUser].getLikes()))
     return "N/A"
@@ -103,8 +102,8 @@ def getLike():
 @app.route('/infoUser')
 def infoUser():
     infoUser = request.args.get('user')
-    print(usernameDict)
-    print(infoUser)
+    #print(usernameDict)
+    #print(infoUser)
     if infoUser in usernameDict:
         return jsonify(usernameDict[infoUser].getInfo())
     return "N/A"
