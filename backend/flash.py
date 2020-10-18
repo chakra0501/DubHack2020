@@ -6,7 +6,7 @@ import UserStore
 #Test Addition to the Dictionary
 bob = UserStore.User("bob","male","Seattle","Abs",23,"I'm buff","bob101@gmail.com", 'Bob', 'Marley')
 joy = UserStore.User("joy", "female", "Chicago", "Abs", 23, "Poojan GF", "poojanGF@poojangf.com", 'Joy', 'Mun')
-julio = UserStore.User("julio","female", "Los Angeles", "chest", 40, "hello world", "hi@email", "Julio", "Jones")
+julio = UserStore.User("julio","female", "Los Angeles", "Abs", 40, "hello world", "hi@email", "Julio", "Jones")
 julio.addLike('bob')
 julio.addLike('joy')
 
@@ -24,6 +24,8 @@ for i in range(100):
         workoutDict[val.workout_type].append(key)
     else:
         workoutDict[val.workout_type] = [key]
+for (k, v) in usernameDict.items():
+    v.updatePotential(workoutDict[v.getWorkout()])
 
 #Main Flask name
 app = Flask(__name__)

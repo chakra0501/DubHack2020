@@ -1,3 +1,12 @@
 {
-    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.8/bin/python3"
+    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.8/bin/python3",
+    "extensions.ignoreRecommendations": true,
+    "files.autoSave": "on",
+    "typescript.tsc.autoDetect": "off"
+    "files.autoSave": "off",
+    "typescript.tsc.autoDetect": "off"
+    "files.autoSave": "off",
+    "typescript.tsc.autoDetect": "off"
+    "files.autoSave": "off",
+    "typescript.tsc.autoDetect": "off"
 }
