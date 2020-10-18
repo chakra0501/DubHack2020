@@ -5,17 +5,25 @@ import UserStore
 
 #Test Addition to the Dictionary
 bob = UserStore.User("bob","male","Seattle","Abs",23,"I'm buff","bob101@gmail.com", 'Bob', 'Marley')
-joy = UserStore.User("joy", "female", "Chicago", "butt", 23, "Poojan GF", "poojanGF@poojangf.com", 'Joy', 'Mun')
+joy = UserStore.User("joy", "female", "Chicago", "Abs", 23, "Poojan GF", "poojanGF@poojangf.com", 'Joy', 'Mun')
 julio = UserStore.User("julio","female", "Los Angeles", "chest", 40, "hello world", "hi@email", "Julio", "Jones")
 julio.addLike('bob')
 julio.addLike('joy')
-julio.addMatch('bob')
-
 
 #The Two Main Dictionaries to be Used
-usernameDict = {'bobby' : bob, 'joy' : joy, 'julio' : julio}
+usernameDict = {'bob' : bob, 'joy' : joy, 'julio' : julio}
 #usernameDict = {}
-workoutDict = {}
+workoutDict = {'Abs' : ['bob','joy']}
+
+for i in range(100):
+    key = 'bob'+str(i) 
+    val = UserStore.User("bob"+str(i),"male","Seattle","Abs",23,"I'm buff","bob101@gmail.com", 'Bob'+str(i), 'Marley')
+    print("hello!")
+    usernameDict[key] = val
+    if val.workout_type in workoutDict:
+        workoutDict[val.workout_type].append(key)
+    else:
+        workoutDict[val.workout_type] = [key]
 
 #Main Flask name
 app = Flask(__name__)
@@ -44,17 +52,18 @@ def newUser():
         workoutDict[workout_type].append(username)
     else:
         workoutDict[workout_type] = [username]
-    return "success"
+    return "success"  
 
 #Getting the Next User to Potentially Match
-@app.route('/getNext') 
+@app.route('/getNext', methods=['POST']) 
 def getNext():
     username = request.args.get('user')
     curr = usernameDict[username].getNextPotential()
+    print(curr)
     return usernameDict[curr].getInfo()
 
 #Updating all Potential Matches with New Users with Same Workout Type
-@app.route('/updatePotential') 
+@app.route('/updatePotential', methods=['POST'])
 def updatePotential():
     username = request.args.get('user')
     curr = usernameDict[username]
@@ -62,7 +71,7 @@ def updatePotential():
     return "success"
 
 #Moving a Potential Match to the Back Due to Dislike (Swipe Left)
-@app.route('/newDislike')
+@app.route('/newDislike', methods=['POST'])
 def newDislike():
     oldUser, newDislike = request.args.get('user'), request.args.get('like')
     curr = usernameDict[oldUser]
@@ -70,7 +79,7 @@ def newDislike():
     return "success"
     
 #Moving a potential match to likes (Swipe Right)
-@app.route('/newLike')
+@app.route('/newLike', methods=['POST'])
 def newLike():
     oldUser, newLike = request.args.get('user'), request.args.get('like')
     print(newLike)
@@ -92,7 +101,7 @@ def newLike():
         return "user not found"
     
 #Getting all the Current Likes
-@app.route('/getLike')
+@app.route('/getLike', methods=['POST'])
 def getLike():
     oldUser = request.args.get('user')
     print(usernameDict)
@@ -117,14 +126,14 @@ def infoUser():
     return jsonify({'username' : None})
 
 #User can remove a particular like    
-@app.route('/removeLike')
+@app.route('/removeLike', methods=['POST'])
 def removeLike():
     oldUser, newLike = request.args.get('user'), request.args.get('like')
     usernameDict[oldUser].removeLike(newLike)
     return "success"
 
 #Get All Of The Current Matches
-@app.route('/getMatch')
+@app.route('/getMatch', methods=['POST'])
 def getMatches():
     name = request.args.get('user')
     if name in usernameDict:
