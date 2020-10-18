@@ -51,7 +51,7 @@ def newUser():
 def getNext():
     username = request.args.get('user')
     curr = usernameDict[username].getNextPotential()
-    return curr
+    return usernameDict[curr].getInfo()
 
 #Updating all Potential Matches with New Users with Same Workout Type
 @app.route('/updatePotential') 
@@ -114,7 +114,7 @@ def infoUser():
         print(usernameDict[infoUser].getInfo())
         return jsonify(usernameDict[infoUser].getInfo())
     print("Data not available...")
-    return "N/A"
+    return jsonify({'username' : None})
 
 #User can remove a particular like    
 @app.route('/removeLike')
