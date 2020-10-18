@@ -25,7 +25,11 @@ for i in range(100):
     else:
         workoutDict[val.workout_type] = [key]
 for (k, v) in usernameDict.items():
+    joy.addLike(k)
+    v.addLike(joy)
+    joy.addMatch(k)
     v.updatePotential(workoutDict[v.getWorkout()])
+
 
 #Main Flask name
 app = Flask(__name__)
@@ -139,8 +143,11 @@ def removeLike():
 def getMatches():
     name = request.args.get('user')
     if name in usernameDict:
-        return jsonify(results=list(usernameDict[name].getMatches()))
-    return "N/A"
+        out = dict()
+        for n in list(usernameDict[name].getMatches()):
+            out[n] = usernameDict[n].getInfo()
+        return jsonify(out)
+    return {}
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port = 3000, debug = True)
