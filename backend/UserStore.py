@@ -1,3 +1,4 @@
+import heapq
 
 class User:
     def __init__(self, username, 
@@ -24,6 +25,10 @@ class User:
         
         #Matches
         self.match = set()
+        
+        #Potential
+        self.potentialCtr = 0
+        self.potential = []
 
     #Get Info
     def getInfo(self):
@@ -40,6 +45,10 @@ class User:
         }
         return out
     
+    #Return Workout
+    def getWorkout(self):
+        return self.workout_type
+    
     #Changing Likes
     def addLike(self, username):
         print(username)
@@ -54,6 +63,7 @@ class User:
     
     #Changing Matches
     def addMatch(self, username):
+        self.like.remove(username)
         self.match.add(username)
         
     def getMatches(self):
@@ -63,6 +73,24 @@ class User:
         if username in self.match:
             self.match.remove(username)
             
+    #Potential
+    def updatePotential(self,workoutList):
+        self.potentialCtr = 0
+        self.potential = list(set(workoutList) - set(self.potential) - set(self.likes) - set(self.match)) + self.potential
+    
+    def getNextPotential(self):
+        self.potentialCtr += 1
+        if(self.potentialCtr == len(self.potential)):
+            return None
+        return self.potential[0]
+    
+    def AddPotentialToEnd(self,item):
+        self.potential.remove(item)
+        self.potential.append(item)
+        
+    def removePotential(self,item):
+        self.potential.remove(item)   
+            
     #Update Info
     def updateInfo(self, 
                     gender = None, 
@@ -70,7 +98,8 @@ class User:
                     workout_type = None, 
                     age = None,
                     about = None,
-                    email = None):
+                    email = None, first = None,
+                    last = None):
         if(gender):
             self.gender = gender 
         if(loc):
@@ -83,6 +112,10 @@ class User:
             self.about = about 
         if(email):
             self.email = email
+        if (first):
+            self.first = first 
+        if (last): 
+            self.last = last 
         
     
         
