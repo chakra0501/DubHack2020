@@ -2,6 +2,8 @@
 from flask import Flask, url_for, send_file, make_response, request, jsonify
 from flask_cors import CORS
 import UserStore
+from PIL import Image
+from io import BytesIO
 
 #Test Addition to the Dictionary
 bob = UserStore.User("bob","male","Seattle","Abs",23,"I'm buff","bob101@gmail.com", 'Bob', 'Marley')
@@ -36,7 +38,7 @@ app = Flask(__name__)
 CORS(app)
 
 #Calling and Generating a New User
-@app.route('/newUser') 
+@app.route('/newUser', methods=['POST']) 
 def newUser():
     #All of the Different Parameters
     username = request.args.get('user')
@@ -48,6 +50,12 @@ def newUser():
     email = request.args.get('email')
     first = request.args.get('first')
     last = request.args.get('last')
+    print(request.mimetype)
+    print(request.url)
+
+    im = Image.open(BytesIO(request.data))
+    im.save("test.png")
+
 
     #Different Users
     newUser = UserStore.User(username, gender, loc, workout_type, age, about, email, first, last)
@@ -58,7 +66,7 @@ def newUser():
         workoutDict[workout_type].append(username)
     else:
         workoutDict[workout_type] = [username]
-    return "success"  
+    return "Success"  
 
 #Getting the Next User to Potentially Match
 @app.route('/getNext', methods=['POST']) 
@@ -102,7 +110,7 @@ def newLike():
             usernameDict[oldUser].addLike(newLike)
             
         #Different Returns to Indicate Success or Failure
-        return "success"
+        return "Success"
     else:
         return "user not found"
     
@@ -119,16 +127,16 @@ def getLike():
 #Getting Info On The User
 @app.route('/infoUser', methods=['POST'])
 def infoUser():
-    if request.json:
-        print('Got JSON!')
+    #if request.json:
+    #    print('Got JSON!')
     infoUser = request.args.get('user')
-    print(usernameDict)
-    print(infoUser)
+    #print(usernameDict)
+    #print(infoUser)
     if infoUser in usernameDict:
-        print("Successful!")
-        print(usernameDict[infoUser].getInfo())
+        #print("Successful!")
+        #print(usernameDict[infoUser].getInfo())
         return jsonify(usernameDict[infoUser].getInfo())
-    print("Data not available...")
+    #print("Data not available...")
     return jsonify({'username' : None})
 
 #User can remove a particular like    
@@ -150,7 +158,7 @@ def getMatches():
     return {}
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port = 3000, debug = True)
+    app.run(host='0.0.0.0', port = 5000, debug = True)
     
 #Sample Urls
 #127.0.0.1/8080/matches?username=bob
