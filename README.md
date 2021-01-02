@@ -1,4 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+DubHacks 2020 Project by Abheek Chakrabarti, Jonathan Ke, Poojan Palwai, Mae Zhang, and Tinghua Hsu
 
 ## Available Scripts
 
